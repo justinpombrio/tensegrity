@@ -8,7 +8,7 @@
 Following the pattern of the
 #link("https://ropesandpoles.blogspot.com/2006/03/step-by-step-tensegrity-tower-part-1.html")[
 Needle Point Tower]
-at the Hirshorn Museum, except without the extra large bottom layer.
+at the Hirshhorn Museum, except without the extra large bottom layer.
 
 _Note:_ all angles are measured in turns.
 
@@ -58,7 +58,7 @@ bottom-most and top-most layers which have 4 strings per stick-end.
 
 === Definitions
 
-- $n$ is the number of layers (so there are $3n$ sticks.
+- $n$ is the number of layers (so there are $3n$ sticks).
 - $m = 15n-6$ is the total number of strings.
 - $r = 1$ is the radius of the cylinder circumscribing the tower.
 - $s$ is the length of each stick.
@@ -72,9 +72,9 @@ There are sticks, plus four kinds of strings:
 - _Sticks_ are grouped in layers, three sticks per layer.
 - _Triangular Strings_ form a triangle at the very top and bottom of the tower.
 - _Hexagonal Strings_ form wobbly hexagons at the intersections between layers.
-- _Inter-Layer Spinal Strings_ go from the bottom of a stick in a layer to the
+- _Intra-Layer Spinal Strings_ go from the bottom of a stick in a layer to the
   top of a different stick in the same layer.
-- _Intra-Layer Spinal Strings_ go between sticks of different layers.
+- _Inter-Layer Spinal Strings_ go between sticks of different layers.
 
 See the helpful diagram on page 22 of
 #link("http://kennethsnelson.net/Tensegrity_and_Weaving.pdf")[Tensegrity and
@@ -275,7 +275,7 @@ factor of $r$.)
 - Triangular string length $= sqrt(3)r$
 - Hexagonal string length $= sqrt(5)/2 r$
 - Intra-layer spinal string length $= sqrt(2 - sqrt(3) + (h/r)^2) r$
-- Inter-layer spinal string length $sqrt(2 + (h-d)^2) r$.
+- Inter-layer spinal string length $sqrt(2 + ((h-d)/r)^2) r$.
 
 Picking $h = sqrt(3)r$:
 
@@ -298,38 +298,39 @@ If $s = 1219"mm"$:
 - Intra-layer spinal string length $= 849"mm"$. Count of $3n = 30$ for
   $25.470"m"$.
 - Inter-layer spinal string length $= 881"mm"$. Count of $6(n-1) = 54$ for
-  $47.547"m"$.
+  $47.574"m"$.
 
 Total string count is 144, which matches the $m = 15n-6$ formula from the
 degrees-of-freedom analysis at the start of the document.
 
-Total string length is $106.251"m"$.
+Total string length is $106.278"m"$.
 
 == Materials
 
-/ Sticks: 30 x 4' long 3/8" diameter wooden dowels. Weight about 0.4 lb, for a
+/ Sticks: ✓ 30 x 4' long 3/4" diameter wooden dowels. Weight about 0.4 lb, for a
   total of 12 lb. Where does one get wood dowels? From
-  #link("https://wood-dowel.com/dowel-rods/poplar-dowels/48-poplar-dowels/3-8-x-48-poplar-dowels.html")[wood-dowels.com] of course.
-/ Bolts: 60 x 3/16" hanger bolts. The ones I prototypes with are 2" long in
-  total, with 1" of screw, 5/8" of 3/16" bolt, and 3/8" blank in the middle.
-  For the rest I'll get #link("https://www.mcmaster.com/90915A410/")[7/8+5/8
-  inch 10-24 hanger bolts].
-/ Nuts: 60 x 3/16" nuts. Getting
+  #link("https://wood-dowel.com/dowel-rods/poplar-dowels/48-poplar-dowels/3-8-x-48-poplar-dowels.html")[wood-dowels.com]
+  of course.
+/ Bolts: ✓ 60 x 10-24" hanger bolts. The ones I prototyped with are 2" long in
+  total, with 1" of screw, 5/8" of 3/16" (or 10-24?) bolt, and 3/8" blank in the middle.
+  For the rest I'll get #link("https://www.mcmaster.com/90915A414/")[1" + 1"
+  10-24 hanger bolts].
+/ Nuts: ✓ 60 x 10-24 nuts. Getting
   #link("https://www.mcmaster.com/91841A011/")[these].
-/ Washers: About 300 washers, for either end of the strings. The ones I
-  got for the prototype have a 6mm inner diameter, and are not very wide or thick.
-  These #link("https://www.mcmaster.com/94773A743/")[expensive shims] have the
-  perfect dimensions, but might not be strong enough. Here are
+/ Washers: ✓ 288 washers, for either end of the strings. The ones I got for the
+  prototype have a 6mm inner diameter, and are not very wide or thick. These
+  #link("https://www.mcmaster.com/94773A743/")[expensive shims] have the perfect
+  dimensions, but might not be strong enough. Here are
   #link("https://www.mcmaster.com/92141A030/")[cheap washers] that are quite
-  large, but cheap  and strong.
-/ String: Lacking a precise total string count, my eyeball says there are
-  about 5 string-ends per stick-end on the Needle Tower. There are $30*2 = 60$
-  stick-ends, making about $60*5 = 300$ string-ends. Two string-ends per string,
-  so $150$ strings. Most are roughly 3-feet, giving rougly 450 feet of string.
-  [My previous estimate was 200feet, something is off!] Fortunately we live in
-  the future, so you can get
+  large, but cheap  and strong. They might cut the cord though. So instead
+  here's cheap, strong, and round
+  #link("https://www.9km-outdoor.com/products/fishing-solid-ring-20-100pcs-fishing-lure-connectors-stainless-steel-snap-fishing-accessories-solid-ring-saltwater-tackle-chrome?variant=43111978238115")[fishing
+  solid rings].
+/ String: ✓ Need a total of $106.278"m"$ of string, though in practice a good deal
+  more than that, maybe $150"m"$ for knot overhead, mistakes, etc. Fortunately
+  we live in the future, so you can get
   #link("https://www.9km-outdoor.com/products/0-8-1-6mm-uhmwpe-cord-spectra-line-hollow-braided-uv-resistnce-outdoor-repair-spliceable-rope-for-spearfishing-stunt-kitesurfing?variant=43094583967907")[black
-  1mm cord that's rated for 350lbs].
+  1.6mm cord that's rated for 400lbs].
 / Paint: Paint or wood stain. Maybe deep red paint.
 / Protectant: Something to put over the paint to make it weather resistant.
 
