@@ -1,22 +1,34 @@
 #import "@preview/cetz:0.3.0": draw, canvas
 
-#let cred = rgb("#d31")
-#let cblue = rgb("#09b")
-#let cyellow = rgb("#b91")
+#let sdefault = (paint: black, thickness: 0.015)
+#let sstick = (paint: black, thickness: 0.02)
+#let sblue = (paint: rgb("#09b"), thickness: 0.015)
+#let syellow = (paint: rgb("#b91"), dash: "densely-dashed", thickness: 0.02)
+#let sred = (paint: rgb("#d31"), dash: "dotted", thickness: 0.03)
 
 #let turns(t) = t * 360deg
 
-#let dot(pos, color: black) = {
-  draw.circle(pos, radius: 0.02, stroke: color, fill: color)
+#let dot(pos, style: sdefault) = {
+  draw.circle(pos, radius: style.thickness, fill: style.paint, stroke: style.paint)
 }
 
-#let segment(pos0, pos1, color: black) = {
-  draw.line(pos0, pos1, stroke: color)
-  dot(pos0, color: color)
-  dot(pos1, color: color)
+#let segment(pos0, pos1, style: sdefault) = {
+  draw.line(pos0, pos1, stroke: style)
+  dot(pos0, style: style)
+  dot(pos1, style: style)
 }
 
 #let cis(a) = (calc.cos(a), calc.sin(a))
+
+#let circlearc(start, stop, style: sdefault) = {
+  draw.arc(
+    cis(start),
+    radius: 1,
+    start: start,
+    delta: (stop - start),
+    stroke: style,
+  )
+}
 
 #let avg(pos0, pos1) = (
   (pos0.at(0) + pos1.at(0))/2,
