@@ -16,10 +16,10 @@ All angles are measured in turns.
 
 The distance between two points on the surface of a cylinder is given by:
 
-$l^2 = Delta h^2 + 2r^2 - 2r^2 cos(Delta theta)$
+$l^2 = Delta h^2 + 2r^2(1 - cos(Delta alpha))$
 
 where $l$ is the distance, $Delta h$ is the difference in height between the two
-points, $r$ is the radius of the cylinder, and $Delta theta$ is the difference
+points, $r$ is the radius of the cylinder, and $Delta alpha$ is the difference
 in angle between the two points.
 
 == Layout
@@ -141,11 +141,10 @@ There are four measurement parameters that determine the shape of the tower:
   layer and the bottom of the bottom of the stick in the layer above that lies
   between them. (See the second diagram in "Layout".)
 
-// From these four parameters you can compute:
-// 
-// - $s$ is the length of each stick.
-//- $d$ is the dip from one layer of the tower to the next (that is, the change in
-//  height from the bottom of a layer to the top of the layer below it).
+From these four parameters you can compute:
+
+- $d$ is the dip from one layer of the tower to the next (that is, the change in
+  height from the bottom of a layer to the top of the layer below it).
 
 == Measurements
 
@@ -166,11 +165,11 @@ Weaving].)
 
 === Sticks
 
-Let's measure the length of one of the sticks. A stick has change in height $h$
-and change in angle $theta$. Using the cylindrical distance formula from
+Let's measure the length $s$ of one of the sticks. A stick has change in height
+$h$ and change in angle $theta$. Using the cylindrical distance formula from
 "Preliminaries" we get a length of:
 
-$s^2 = h^2 + 2r^2 - 2r^2 cos(theta)$
+$s^2 = h^2 + 2r^2(1 - cos(theta))$
 
 #canvas(length: 3cm, {
   import draw: *
@@ -183,16 +182,10 @@ $s^2 = h^2 + 2r^2 - 2r^2 cos(theta)$
   segment(c0, c1)
 })
 
-This triangle has an angle of $2.5/12$ turns, so the length of the blue line
-when viewed from above is $2sin(5/24) = (1 + sqrt(3))/sqrt(2)$. The change in
-height is $h$, giving a total length of $sqrt(((1 + sqrt(3))/sqrt(2))^2 + h^2) =
-sqrt(2 + sqrt(3) + h^2)$.
-
-
 === Triangular Strings
 
-There are strings forming a triangle at the very bottom and very top of the
-tower:
+There are strings of length $t$ forming a triangle at the very bottom and very
+top of the tower:
 
 #canvas(length: 3cm, {
   import draw: *
@@ -208,18 +201,18 @@ tower:
   segment(b0, c0, style: sblue)
   segment(c0, a0, style: sblue)
 
-  segment((0, 0), a0, style: sred)
-  segment((0, 0), avg(a0, b0), style: sred)
-  segment(a0, avg(a0, b0), style: sred)
+  circlearc(turns(-7/24), turns(1/24), style: sred)
 })
 
-This is a $1/12$, $2/12$, $3/12$ triangle, so each of these strings has length
-$sqrt(3)$.
+The change in height of one of these strings is 0, and the change in angle is
+1/3 (it's an equilateral triangle), so the distance formula gives:
+
+$t^2 = 2r^2(1 - cos(1/3)) = 3r^2$
 
 === Hexagonal Strings
 
-There are strings connecting the top of one layer to the bottom of the next,
-forming a wobbly horizontal-ish hexagon.
+There are strings of length $x$ connecting the top of one layer to the bottom of
+the next, forming a wobbly hexagon.
 
 #canvas(length: 3cm, {
   import draw: *
@@ -242,19 +235,16 @@ forming a wobbly horizontal-ish hexagon.
   segment(b1, f0, style: sblue)
   segment(f0, a1, style: sblue)
 
-  segment((0, 0), c1, style: sred)
-  segment((0, 0), e0, style: sred)
-  segment(c1, e0, style: sred)
+  circlearc(turns(-5/24), turns(-1/24), style: sred)
 })
 
-This is an equilateral triangle, so the length of each hexagonal string when
-viewed from above is 1. The change in height is $d$, so the total length is
-$sqrt(1 + d^2)$.
+The change in height is $d$ and the change in angle is 1/6, so the length of an
+edge of the hexagon is:
 
-The choice of $d$ isn't arbitrary, though. I'm not sure how to calculate it
-precisely, but my best guess is that the horizontal and vertical displacements
-of the bottom of a stick from the center point of the tops of the two sticks
-supporting it should be equal.
+$x^2 = d^2 + 2r^2(1 - cos(1/6)) = d^2 + r^2$
+
+What's $d$, though, in terms of $phi$? Phi is the incline of this dashed yellow
+triangle, while $d$ is the height of that triangle:
 
 #canvas(length: 3cm, {
   import draw: *
@@ -277,21 +267,27 @@ supporting it should be equal.
   segment(b1, f0, style: sblue)
   segment(f0, a1, style: sblue)
 
-  segment(b1, c1, style: syellow)
-  segment((0, 0), e0, style: syellow)
-
-  segment(e0, c1, style: sred)
-  segment(c1, avg(b1, c1), style: sred)
-  segment(e0, avg(b1, c1), style: sred)
+  segment(c1, e0, style: syellow)
+  segment(e0, b1, style: syellow)
+  segment(c1, b1, style: syellow)
+  segment(avg(c1, b1), e0, style: sred)
 })
 
-This is a $1/12$, $2/12$, $3/12$ triangle, making my estimate $d = 1/2$. Making
-the hexagonal string length be $sqrt(1 + d^2) = sqrt(5/4) = sqrt(5)/2$.
+The triangle perpendicular (the dotted red line) has length $r/2$ when viewed
+from above and length $d$ when viewed from the side, so:
 
-=== Intra-Layer Spinal Strings
+$tan(phi) = d/((r/2))$
 
-Each layer has three vertical-ish strings going from the bottom of its sticks to
-the tops of other sticks.
+$d = 1/2 r tan(phi)$
+
+Putting these equations together yields:
+
+$x^2 = 1/4 r^2 tan(phi)^2 + r^2$
+
+=== Within-Layer Spinal Strings
+
+Each layer has three vertical-ish strings of length $w$ going from the bottom of
+its sticks to the tops of other sticks:
 
 #canvas(length: 3cm, {
   import draw: *
@@ -307,20 +303,24 @@ the tops of other sticks.
   segment(b0, a1, style: sblue)
   segment(c0, b1, style: sblue)
 
-  segment((0, 0), avg(a0, c1), style: sred)
-  segment((0, 0), a0, style: sred)
-  segment(a0, avg(a0, c1), style: sred)
+  circlearc(turns(-7/24), turns(3/24), style: sred)
 })
 
-This triangle has angle 1/24, so the string when viewed from above has length
-$2sin(1/24) = (sqrt(3)-1)/sqrt(2)$. The change in height is $h$, so the total
-length is $sqrt(2 - sqrt(3) + h^2)$.
+The red arc has angle $theta$ (since it goes between the bottom and top of a
+stick). It also has angle $1/3 + alpha$ where $alpha$ is the change in angle of
+a within-layer spinal string. So $theta = 1/3 + alpha$ and $alpha = theta -
+1/3$.
 
-=== Inter-Layer Spinal Strings
+Thus a within-layer spinal string has change in angle $theta - 1/3$ and change
+in height $h$. Using the cylindrical distance formula it has length:
 
-There are also vertical-ish strings going between layers: from the bottom of a
-stick to the bottoms of the sticks above and below it, and likewise for the tops
-of sticks.
+$w^2 = h^2 + 2r^2(1 - cos(theta - 1/3))$
+
+=== Between-Layer Spinal Strings
+
+There are also vertical-ish strings of length $b$ going between layers: from the
+bottom of a stick to the bottoms of the sticks above and below it, and likewise
+for the tops of sticks:
 
 #canvas(length: 3cm, {
   import draw: *
@@ -340,16 +340,98 @@ of sticks.
   segment(b0, f0, style: syellow)
   segment(c0, e0, style: syellow)
 
-  segment((0, 0), avg(c0, e0), style: sred)
-  segment((0, 0), e0, style: sred)
-  segment(e0, avg(c0, e0), style: sred)
+  circlearc(turns(-7/24), turns(3/24), style: sred)
 })
 
-This is an isosceles right triangle, so the yellow line (viewed from above) has
-length $sqrt(2)$. The change in height is $h - d$, so the total length is
-$sqrt(2 + (h-d)^2)$.
+The dotted red arc has length $theta$. It also has length $beta + 1/6$, where
+$beta$ is the change in angle of a between-layer string. So $theta = beta + 1/6$
+and $beta = theta - 1/6$.
+
+Thus a between-layer spinal string has change in angle $theta - 1/6$ and change
+in height $h - d$. Using the cylindrical distance formula it has length:
+
+$b^2 = (h-d)^2 + 2r^2(1 - cos(theta - 1/6))$
 
 === Summary
+
+/ stick: $s^2 = h^2 + 2r^2(1 - cos(theta))$
+/ triangle: $t^2 = 3r^2$
+/ hexagon: $x^2 = d^2 + r^2$
+/ dip: $d = 1/2 r tan(phi)$
+/ within-layer: $w^2 = h^2 + 2r^2(1 - cos(theta - 1/3))$
+/ between-layer: \ $b^2 = (h-d)^2 + 2r^2(1 - cos(theta - 1/6))$
+
+== Calculating the Shape
+
+=== Single-Layer Contortion
+
+Pick $theta$ to minimize $w$ given the constraints:
+
+- $s^2 = h^2 + 2r^2(1 - cos(theta))$
+
+- $w^2 = h^2 + 2r^2(1 - cos(theta - 1/3))$
+
+Rearranging, we want to minimize:
+
+$w^2 = s^2 + 2r^2(cos(theta) - cos(theta - 1/3)$
+
+The minima will be where the derivative of $w^2$ is 0:
+
+$d/(d theta) w^2 = 4 pi r^2(sin(theta - 1/3) -sin(theta)) = 0$
+
+$sin(theta) = sin(theta - 1/3)$
+
+The relevant solution to this equation is $theta = 5/12$. Substituting into the
+measurements gives:
+
+/ stick: $s^2 = h^2 + r^2(2 + sqrt(3))$
+/ triangle: $t^2 = 3r^2$
+/ hexagon: $x^2 = d^2 + r^2$
+/ dip: $d = 1/2 r tan(phi)$
+/ within-layer: $w^2 = h^2 + r^2(2 - sqrt(3))$
+/ between-layer: $b^2 = (h-d)^2 + 2r^2$
+
+#pagebreak()
+
+=== Multi-Layer Contortion
+
+Pick $phi$ to minimize $b$ given the constraints:
+
+// - $s^2 = h^2 + r^2(2 + sqrt(3))$
+// - $x^2 = d^2 + r^2$
+- $d = 1/2 r tan(phi)$
+- $b^2 = (h-d)^2 + 2r^2$
+
+Expanding and substituting into the second equation:
+
+$b^2 = h^2 - 2 h d + d^2 + 2r^2$
+
+$b^2 = h^2 - h r tan(phi) + 1/4 r^2 tan(phi)^2 + 2r^2$
+
+To minimize $b$, the derivative of $b^2$ with respect to $phi$ must be 0:
+
+$ d/(d phi) b^2 = - (h r)/cos(phi)^2 + 1/2 r^2 sin(phi)/cos(phi)^3 = 0 $
+
+Multiplying by $2cos(phi)^3/r$ and simplifying:
+
+$ 2 h cos(phi) = r sin(phi) $
+
+$ tan(phi) = (2 h)/ r $
+
+---------
+
+$b^2 = (h - 1/2 r tan(phi))^2 + 2r^2$
+
+$b^2 = h^2 - h r tan(phi) + 1/4 r^2 tan(phi)^2 + 2r^2$
+
+$d/(d phi) b^2 = - (h r)/cos(phi) + 1/2 r^2 sin(phi)/cos(phi)^3 = 0$
+
+$- h cos(phi)^2 + 1/2 r sin(phi) = 0$
+
+$2h/r cos(phi) = tan(0.666)$
+
+
+=== OLD Summary
 
 (No longer assuming $r = 1$, which scales all measurements up to this point by a
 factor of $r$.)
