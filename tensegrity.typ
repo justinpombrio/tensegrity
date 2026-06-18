@@ -93,11 +93,9 @@ regular hexagon:
   segment(b1, c1, style: sred)
 })
 
-There's an overlap in height between any two layers, thus this red dotted
-triangle---connecting the tops of two sticks in one layer and the bottom of a
-stick in the layer above---is not flat. The _incline_ of this plane (the angle
-you'd need to rotate it to make it flat) is an important angle, and we'll call
-it $phi$.
+There's an overlap in height between any two layers, so this hexagon isn't flat,
+three of its points are lower than the other three. We'll call the height of the
+hexagon $d$, for the _dip_ between layers.
 
 === Degrees of Freedom
 
@@ -137,14 +135,14 @@ There are four measurement parameters that determine the shape of the tower:
 - $theta$ is the _twist_ of a layer: the rotation of the equilateral triangle
   formed by the tops of the sticks of a layer, relative to the triangle formed
   by the bottoms of those sticks. (See the first diagram in "Layout".)
-- $phi$ is _incline_ of a triangle formed by the tops of two sticks of a
-  layer and the bottom of the bottom of the stick in the layer above that lies
-  between them. (See the second diagram in "Layout".)
+- $d$ is the overlap in height between adjacent layers of the tower.
 
+/*
 From these four parameters you can compute:
 
 - $d$ is the dip from one layer of the tower to the next (that is, the change in
   height from the bottom of a layer to the top of the layer below it).
+  */
 
 == Measurements
 
@@ -243,6 +241,7 @@ edge of the hexagon is:
 
 $x^2 = d^2 + 2r^2(1 - cos(1/6)) = d^2 + r^2$
 
+/*
 What's $d$, though, in terms of $phi$? Phi is the incline of this dashed yellow
 triangle, while $d$ is the height of that triangle:
 
@@ -283,6 +282,7 @@ $d = 1/2 r tan(phi)$
 Putting these equations together yields:
 
 $x^2 = 1/4 r^2 tan(phi)^2 + r^2$
+*/
 
 === Within-Layer Spinal Strings
 
@@ -357,15 +357,14 @@ $b^2 = (h-d)^2 + 2r^2(1 - cos(theta - 1/6))$
 / stick: $s^2 = h^2 + 2r^2(1 - cos(theta))$
 / triangle: $t^2 = 3r^2$
 / hexagon: $x^2 = d^2 + r^2$
-/ dip: $d = 1/2 r tan(phi)$
+// / dip: $d = 1/2 r tan(phi)$
 / within-layer: $w^2 = h^2 + 2r^2(1 - cos(theta - 1/3))$
 / between-layer: \ $b^2 = (h-d)^2 + 2r^2(1 - cos(theta - 1/6))$
 
 == Calculating the Shape
 
-=== Single-Layer Contortion
-
-Pick $theta$ to minimize $w$ given the constraints:
+We can do #link("https://nexp.pt/pdf/tenseg.pdf")[some math] to determine
+$theta$. Pick $theta$ to minimize $w$ given the constraints:
 
 - $s^2 = h^2 + 2r^2(1 - cos(theta))$
 
@@ -387,89 +386,68 @@ measurements gives:
 / stick: $s^2 = h^2 + r^2(2 + sqrt(3))$
 / triangle: $t^2 = 3r^2$
 / hexagon: $x^2 = d^2 + r^2$
-/ dip: $d = 1/2 r tan(phi)$
+// / dip: $d = 1/2 r tan(phi)$
 / within-layer: $w^2 = h^2 + r^2(2 - sqrt(3))$
 / between-layer: $b^2 = (h-d)^2 + 2r^2$
 
-#pagebreak()
+I also wanted to do math to calculate $d$, but a springy simulation seems to
+show that $d$ can take on any value.
 
-=== Multi-Layer Contortion
+== Picking the Shape
 
-Pick $phi$ to minimize $b$ given the constraints:
+The remaining parameters are free choices: $theta$ must be $5/12$ but we can
+pick anything we like for $r$, $h$, and $d$. I choose:
 
-// - $s^2 = h^2 + r^2(2 + sqrt(3))$
-// - $x^2 = d^2 + r^2$
-- $d = 1/2 r tan(phi)$
-- $b^2 = (h-d)^2 + 2r^2$
+- $h = sqrt(3)r$
+- $d = h/4 = sqrt(3)/4 r$
 
-Expanding and substituting into the second equation:
+This gives measurements:
 
-$b^2 = h^2 - 2 h d + d^2 + 2r^2$
+/ stick: $s = sqrt(5 + sqrt(3))" "r$
+/ triangle: $t = sqrt(3)" "r$
+/ hexagon: $x = sqrt(19)/4 r$
+/ within-layer: $w = sqrt(5 - sqrt(3))" "r$
+/ between-layer: $b = sqrt(59)/4 r$
 
-$b^2 = h^2 - h r tan(phi) + 1/4 r^2 tan(phi)^2 + 2r^2$
+=== Actual Measurements
 
-To minimize $b$, the derivative of $b^2$ with respect to $phi$ must be 0:
+The wooden dowel's we'll use are 4 feet long, a.k.a. 1219 mm. Thus we can solve
+for $r$:
 
-$ d/(d phi) b^2 = - (h r)/cos(phi)^2 + 1/2 r^2 sin(phi)/cos(phi)^3 = 0 $
+#let s = 1219
+#let r = calc.round(s/calc.sqrt(5 + calc.sqrt(3)))
+$ r = s/sqrt(5 + sqrt(3)) = (1219"mm")/sqrt(5 + sqrt(3))
+  = #r "mm" $
 
-Multiplying by $2cos(phi)^3/r$ and simplifying:
+then calculate the _final measurements_:
+#let t = calc.round(calc.sqrt(3)*r)
+#let x = calc.round(calc.sqrt(19)/4*r)
+#let w = calc.round(calc.sqrt(5 - calc.sqrt(3))*r)
+#let b = calc.round(calc.sqrt(59)/4*r)
 
-$ 2 h cos(phi) = r sin(phi) $
+#let n = 10
+#let scount = 3 * n
+#let tcount = 6
+#let tlen = calc.round(t * tcount)
+#let xcount = 6*(n - 1)
+#let xlen = calc.round(x * xcount)
+#let wcount = 3*n
+#let wlen = calc.round(w * wcount)
+#let bcount = 6*(n - 1)
+#let blen = calc.round(b * bcount)
+#let total_len = tlen + xlen + wlen + blen
 
-$ tan(phi) = (2 h)/ r $
+/ stick: $s = #s"mm"$. Count of $3n = #scount$.
+/ triangle: $t = #t"mm"$. Count of $#tcount$ for #(tlen)mm.
+/ hexagon: $x = #x"mm"$.\ Count of $6(n-1) = #xcount$ for #(xlen)mm.
+/ within-layer: $w = #w"mm"$.\ Count of $3n = #wcount$ for #(wlen)mm.
+/ between-layer: $b = #b"mm"$.\ Count of $6(n-1) = #bcount$ for #(blen)mm.
 
----------
-
-$b^2 = (h - 1/2 r tan(phi))^2 + 2r^2$
-
-$b^2 = h^2 - h r tan(phi) + 1/4 r^2 tan(phi)^2 + 2r^2$
-
-$d/(d phi) b^2 = - (h r)/cos(phi) + 1/2 r^2 sin(phi)/cos(phi)^3 = 0$
-
-$- h cos(phi)^2 + 1/2 r sin(phi) = 0$
-
-$2h/r cos(phi) = tan(0.666)$
-
-
-=== OLD Summary
-
-(No longer assuming $r = 1$, which scales all measurements up to this point by a
-factor of $r$.)
-
-- $s = sqrt(2 + sqrt(3) + (h/r)^2)r$
-- $d = r/2$
-- Triangular string length $= sqrt(3)r$
-- Hexagonal string length $= sqrt(5)/2 r$
-- Intra-layer spinal string length $= sqrt(2 - sqrt(3) + (h/r)^2) r$
-- Inter-layer spinal string length $sqrt(2 + ((h-d)/r)^2) r$.
-
-Picking $h = sqrt(3)r$:
-
-- $s = sqrt(5 + sqrt(3))r$
-- $d = r/2$
-- Triangular string length $= sqrt(3)r$
-- Hexagonal string length $= sqrt(5)/2 r$
-- Intra-layer spinal string length $= sqrt(5 - sqrt(3))r$
-- Inter-layer spinal string length $sqrt(2 + (sqrt(3)-1/2)^2) r =
-  sqrt(21/4-sqrt(3)) r$.
-
-If $s = 1219"mm"$:
-
-- $s = 1219"mm"$
-- $r = 470"mm"$
-- $h = 814"mm"$
-- $d = 235"mm"$
-- Triangular string length $= 814"mm"$. Count of $6$ for $4.884"m"$.
-- Hexagonal string length $= 525"mm"$. Count of $6(n-1) = 54$ for $28.350"m"$.
-- Intra-layer spinal string length $= 849"mm"$. Count of $3n = 30$ for
-  $25.470"m"$.
-- Inter-layer spinal string length $= 881"mm"$. Count of $6(n-1) = 54$ for
-  $47.574"m"$.
-
-Total string count is 144, which matches the $m = 15n-6$ formula from the
+The total string count is 144, which matches the $m = 15n-6$ formula from the
 degrees-of-freedom analysis at the start of the document.
 
-Total string length is $106.278"m"$.
+The total string length is #(total_len)mm, or about
+#calc.round(total_len/1000)m.
 
 == Materials
 
@@ -520,8 +498,7 @@ document. Then:
 - The actual length should be $3"mm"$ shorter than the nominal length.
 - The K'nex jig's _measurement track_ should make a correctly sized string on it
   be taut. Emperically this happens when the distance between the _outsides_ of
-  the rods sticking up (the longest measurement you might make) is $3"mm"$
-  longer than the nominal length.
+  the rods sticking up is $3"mm"$ longer than the nominal length.
 - The K'nex jig's _tying track_ should be two blue spacers shorter than the
   measurement track.
 
@@ -540,7 +517,5 @@ quality Needle Tower pic]
 
 == Open Questions
 
-- Is there one correct choice for $d$ relative to $h$, or can it be whatever?
-  The failure mode would be a floppy tower because the sticks can settle into a
-  lower-string-length configuration.
+- Simulations suggest that any $d$ will work. Is this actually true?
 - How to tension final cords?

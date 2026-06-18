@@ -1,0 +1,149 @@
+gravity 0.00001
+steps 10000000
+damping 10
+settle 0.000000001
+
+point A0_0 = r: 1.0 theta:  0/12 z: 0.0
+point A1_0 = r: 1.0 theta:  0/12 z: 1.8
+point B0_0 = r: 1.0 theta:  4/12 z: 0.0
+point B1_0 = r: 1.0 theta:  4/12 z: 1.8
+point C0_0 = r: 1.0 theta:  8/12 z: 0.0
+point C1_0 = r: 1.0 theta:  8/12 z: 1.8
+
+point A0_1 = r: 1.0 theta:  5/12 z: 1.0
+point A1_1 = r: 1.0 theta:  5/12 z: 2.8
+point B0_1 = r: 1.0 theta:  9/12 z: 1.0
+point B1_1 = r: 1.0 theta:  9/12 z: 2.8
+point C0_1 = r: 1.0 theta:  1/12 z: 1.0
+point C1_1 = r: 1.0 theta:  1/12 z: 2.8
+
+point D0_0 = r: 1.0 theta:  3/12 z: 0.9
+point D1_0 = r: 1.0 theta:  3/12 z: 2.7
+point E0_0 = r: 1.0 theta: 11/12 z: 0.9
+point E1_0 = r: 1.0 theta: 11/12 z: 2.7
+point F0_0 = r: 1.0 theta:  7/12 z: 0.9
+point F1_0 = r: 1.0 theta:  7/12 z: 2.7
+
+point D0_1 = r: 1.0 theta: 10/12 z: 1.9
+point D1_1 = r: 1.0 theta: 10/12 z: 3.7
+point E0_1 = r: 1.0 theta:  6/12 z: 1.9
+point E1_1 = r: 1.0 theta:  6/12 z: 3.7
+point F0_1 = r: 1.0 theta:  2/12 z: 1.9
+point F1_1 = r: 1.0 theta:  2/12 z: 3.7
+
+# Sticks
+
+stick A0_0 A0_1
+stick A1_0 A1_1
+stick B0_0 B0_1
+stick B1_0 B1_1
+stick C0_0 C0_1
+stick C1_0 C1_1
+stick D0_0 D0_1
+stick D1_0 D1_1
+stick E0_0 E0_1
+stick E1_0 E1_1
+stick F0_0 F0_1
+stick F1_0 F1_1
+
+# Triangles
+
+string A0_0 B0_0
+string B0_0 C0_0
+string C0_0 A0_0
+
+string D1_1 E1_1
+string E1_1 F1_1
+string F1_1 D1_1
+
+# Hexagons
+
+string E0_0 C0_1
+string C0_1 D0_0
+string D0_0 A0_1
+string A0_1 F0_0
+string F0_0 B0_1
+string B0_1 E0_0
+
+string E0_1 C1_0
+string C1_0 D0_1
+string D0_1 A1_0
+string A1_0 F0_1
+string F0_1 B1_0
+string B1_0 E0_1
+
+string E1_0 C1_1
+string C1_1 D1_0
+string D1_0 A1_1
+string A1_1 F1_0
+string F1_0 B1_1
+string B1_1 E1_0
+
+# Within-Layer Spines
+
+string A0_0 C0_1
+string B0_0 A0_1
+string C0_0 B0_1
+
+string A1_0 C1_1
+string B1_0 A1_1
+string C1_0 B1_1
+
+string D0_0 F0_1
+string E0_0 D0_1
+string F0_0 E0_1
+
+string D1_0 F1_1
+string E1_0 D1_1
+string F1_0 E1_1
+
+# Between-Layer Spines
+
+string A0_0 D0_0
+string B0_0 F0_0
+string C0_0 E0_0
+
+string A0_1 F0_1
+string B0_1 E0_1
+string C0_1 D0_1
+
+string A1_0 D0_0
+string B1_0 F0_0
+string C1_0 E0_0
+
+string A1_1 F0_1
+string B1_1 E0_1
+string C1_1 D0_1
+
+string A1_0 D1_0
+string B1_0 F1_0
+string C1_0 E1_0
+
+string A1_1 F1_1
+string B1_1 E1_1
+string C1_1 D1_1
+
+# Measurements
+
+measure hA0 = height A0_0 A0_1
+measure hD0 = height D0_0 D0_1
+measure hA1 = height A1_0 A1_1
+measure hD1 = height D1_0 D1_1
+
+measure d0 = height D0_0 A0_1
+measure d1 = height A1_0 D0_1
+measure d2 = height D1_0 A1_1
+
+measure rA0_0 = radius A0_0 A0_0
+measure rA0_1 = radius A0_1 A0_1
+measure rD0_0 = radius D0_0 D0_0
+measure rD0_1 = radius D0_1 D0_1
+measure rA1_0 = radius A1_0 A1_0
+measure rA1_1 = radius A1_1 A1_1
+measure rD1_0 = radius D1_0 D1_0
+measure rD1_1 = radius D1_1 D1_1
+
+measure theta_A0 = angle A0_0 A0_1
+measure theta_D0 = angle D0_0 D0_1
+measure theta_A1 = angle A1_0 A1_1
+measure theta_D1 = angle D1_0 D1_1

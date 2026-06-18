@@ -243,6 +243,7 @@ impl Tensegrity {
 
     fn step(&mut self) -> f64 {
         let rate = 1.0 / self.damping;
+        let effective_gravity = self.gravity / self.damping;
         let mut forces = vec![Point::zero(); self.points.len()];
 
         for connection in &self.connections {
@@ -252,7 +253,13 @@ impl Tensegrity {
         }
 
         for force in &mut forces {
-            *force += Point::cartesian(0.0, 0.0, -self.gravity);
+            *force += Point::cartesian(0.0, 0.0, -effective_gravity);
+        }
+
+        for (point, force) in self.points.iter().zip(forces.iter_mut()) {
+            if point.z() <= 0.0 && force.z() < 0.0 {
+                *force = Point::cartesian(force.x(), force.y(), 0.0);
+            }
         }
 
         let mut total_movement = 0.0;
@@ -261,7 +268,7 @@ impl Tensegrity {
             *point += force * rate;
             if point.z() < 0.0 {
                 // There's a floor
-                *point = Point::cartesian(point.x(), point.y(), 0.0);
+                //*point = Point::cartesian(point.x(), point.y(), 0.0);
             }
             total_movement += point.distance(old_point);
         }
@@ -295,10 +302,14 @@ impl Tensegrity {
                 ConnectionKind::Stick => "stick",
             };
             let len = self.points[c.a].distance(self.points[c.b]);
-            let stretch = len / c.init_len;
+            let stretch = len / c.init_len - 1.0;
             println!(
-                "{kind} {} {} length {:.5} stretch {:.5}",
-                self.point_names[c.a], self.point_names[c.b], len, stretch,
+                "{kind} {} {} length {:.5} stretch {:.5} g {:.5}",
+                self.point_names[c.a],
+                self.point_names[c.b],
+                len,
+                stretch,
+                stretch / self.gravity
             );
         }
 
