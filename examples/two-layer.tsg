@@ -1,7 +1,7 @@
-gravity 0.0
-steps 1000000
-damping 1000
-settle 0.000001
+gravity 0.000001
+steps 100000000
+damping 100
+settle 0.0000000001
 
 point origin = r: 0.0 theta: 0.0 z: 0.0
 
@@ -13,13 +13,13 @@ point a1 = r: 1.0 theta:  5/12 z: 1.0
 point b1 = r: 1.0 theta:  9/12 z: 1.0
 point c1 = r: 1.0 theta:  1/12 z: 1.0
 
-point d0 = r: 1.0 theta:  3/12 z: 1.0
-point e0 = r: 1.0 theta: 11/12 z: 1.0
-point f0 = r: 1.0 theta:  7/12 z: 1.0
+point d0 = r: 1.0 theta:  3/12 z: 0.75
+point e0 = r: 1.0 theta: 11/12 z: 0.75
+point f0 = r: 1.0 theta:  7/12 z: 0.75
 
-point d1 = r: 1.0 theta: 10/12 z: 2.0
-point e1 = r: 1.0 theta:  6/12 z: 2.0
-point f1 = r: 1.0 theta:  2/12 z: 2.0
+point d1 = r: 1.0 theta: 10/12 z: 1.0
+point e1 = r: 1.0 theta:  6/12 z: 1.0
+point f1 = r: 1.0 theta:  2/12 z: 1.0
 
 # Sticks
 

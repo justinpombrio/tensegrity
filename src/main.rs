@@ -40,10 +40,31 @@ impl Measure {
 }
 
 #[derive(Debug, Clone, Copy)]
+enum ConnectionKind {
+    String,
+    Stick,
+    Spring,
+}
+
+#[derive(Debug, Clone, Copy)]
 struct Connection {
+    kind: ConnectionKind,
     a: usize,
     b: usize,
-    rest_len: f64,
+    init_len: f64,
+}
+
+impl Connection {
+    fn force(&self, points: &[Point]) -> Point {
+        let disp = points[self.b] - points[self.a];
+        let len = points[self.a].distance(points[self.b]);
+        let rest_len = self.init_len;
+        match self.kind {
+            ConnectionKind::Stick => disp * ((len - rest_len) / len),
+            ConnectionKind::String => disp * ((len - rest_len).max(0.0) / len),
+            ConnectionKind::Spring => disp,
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -74,12 +95,12 @@ impl Tensegrity {
             r"^point\s+(\w+)\s*=\s*r:\s*({NUM})\s+theta:\s*({NUM})\s+z:\s*({NUM})$"
         ))
         .unwrap();
-        let conn_re = Regex::new(r"^(string|stick)\s+(\w+)\s+(\w+)$").unwrap();
+        let conn_re = Regex::new(r"^(string|spring|stick)\s+(\w+)\s+(\w+)$").unwrap();
         let measure_re =
             Regex::new(r"^measure\s+(\w+)\s*=\s*(distance|height|radius|angle)\s+(\w+)\s+(\w+)$")
                 .unwrap();
 
-        let mut gravity = 0.0;
+        let mut gravity = 0.1;
         let mut steps = 10_000;
         let mut damping = 10.0;
         let mut settle = 0.0001;
@@ -129,9 +150,6 @@ impl Tensegrity {
 
             if let Some(c) = gravity_re.captures(line) {
                 gravity = parse_num(line, &c[1]);
-                if gravity != 0.0 {
-                    panic!("Gravity poorly implemented");
-                }
             } else if let Some(c) = steps_re.captures(line) {
                 steps = parse_int(line, &c[1]);
             } else if let Some(c) = damping_re.captures(line) {
@@ -172,12 +190,19 @@ impl Tensegrity {
             } else if let Some(c) = conn_re.captures(line) {
                 let a = lookup(&name_to_point_idx, line, &c[2]);
                 let b = lookup(&name_to_point_idx, line, &c[3]);
-                let rest_len = match &c[1] {
-                    "string" => 0.0,
-                    "stick" => points[a].distance(points[b]),
-                    _ => unreachable!("regex guarantees kind is 'string|stick'"),
+                let init_len = points[a].distance(points[b]);
+                let kind = match &c[1] {
+                    "spring" => ConnectionKind::Spring,
+                    "stick" => ConnectionKind::Stick,
+                    "string" => ConnectionKind::String,
+                    _ => unreachable!("regex guarantees kind is 'string|stick|spring'"),
                 };
-                connections.push(Connection { a, b, rest_len });
+                connections.push(Connection {
+                    kind,
+                    a,
+                    b,
+                    init_len,
+                });
             } else if let Some(c) = measure_re.captures(line) {
                 measures.push(Measure {
                     name: {
@@ -220,16 +245,10 @@ impl Tensegrity {
         let rate = 1.0 / self.damping;
         let mut forces = vec![Point::zero(); self.points.len()];
 
-        for c in &self.connections {
-            let disp = self.points[c.b] - self.points[c.a];
-            let len = self.points[c.a].distance(self.points[c.b]);
-            let force = if len > 1e-9 {
-                disp * ((len - c.rest_len) / len)
-            } else {
-                Point::zero()
-            };
-            forces[c.a] += force;
-            forces[c.b] -= force;
+        for connection in &self.connections {
+            let force = connection.force(&self.points);
+            forces[connection.a] += force;
+            forces[connection.b] -= force;
         }
 
         for force in &mut forces {
@@ -242,7 +261,7 @@ impl Tensegrity {
             *point += force * rate;
             if point.z() < 0.0 {
                 // There's a floor
-                // *point = Point::cartesian(point.x(), point.y(), 0.0);
+                *point = Point::cartesian(point.x(), point.y(), 0.0);
             }
             total_movement += point.distance(old_point);
         }
@@ -264,17 +283,22 @@ impl Tensegrity {
 
     fn report(&self) {
         println!();
-        for (i, p) in self.points.iter().enumerate() {
-            println!("point {} = {p}", self.point_names[i]);
+        for (i, point) in self.points.iter().enumerate() {
+            println!("point {} = {}", self.point_names[i], point);
         }
 
         println!();
         for c in &self.connections {
-            let kind = if c.rest_len == 0.0 { "string" } else { "stick" };
+            let kind = match c.kind {
+                ConnectionKind::Spring => "spring",
+                ConnectionKind::String => "string",
+                ConnectionKind::Stick => "stick",
+            };
             let len = self.points[c.a].distance(self.points[c.b]);
+            let stretch = len / c.init_len;
             println!(
-                "{kind} {} {} length {:.5}",
-                self.point_names[c.a], self.point_names[c.b], len
+                "{kind} {} {} length {:.5} stretch {:.5}",
+                self.point_names[c.a], self.point_names[c.b], len, stretch,
             );
         }
 

@@ -1,0 +1,38 @@
+gravity 0.0
+steps 10000000
+damping 100
+settle 0.0000000001
+
+point a0 = r: 1.0 theta: 0/3 z: 0.0
+point b0 = r: 1.0 theta: 1/3 z: 0.0
+point c0 = r: 1.0 theta: 2/3 z: 0.0
+
+point a1 = r: 1.0 theta: 0/3 z: 1.0
+point b1 = r: 1.0 theta: 1/3 z: 1.0
+point c1 = r: 1.0 theta: 2/3 z: 1.0
+
+stick a0 a1
+stick b0 b1
+stick c0 c1
+
+spring a0 b0
+spring b0 c0
+spring c0 a0
+
+spring a1 b1
+spring b1 c1
+spring c1 a1
+
+spring a0 c1
+spring b0 a1
+spring c0 b1
+
+measure ha = height a0 a1
+measure hb = height b0 b1
+measure hc = height c0 c1
+measure ra = radius a0 a0
+measure rb = radius b0 b0
+measure rc = radius c0 c0
+measure theta_a = angle a0 a1
+measure theta_b = angle b0 b1
+measure theta_c = angle c0 c1
