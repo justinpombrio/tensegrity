@@ -502,6 +502,29 @@ Total string length is $106.278"m"$.
 
 #link("https://www.mcmaster.com/")[McMaster] has lots of specific hardware.
 
+== String Construction
+
+- Tie one end of a string to a metal ring using three half hitches.
+- Weight the string with 50lb to tighten the first knot.
+- Tie the other end of the string to another metal ring using three half
+  hitches, at a slightly shorter length (see the next section).
+- Weight the string again with 50lb to tighten the second knot.
+
+== Jig Construction
+
+Define the _actual length_ of a tied string to be the distance from the center
+of one of the metal rings it's attached to to the center of the other. Define
+the _nominal length_ of a string to be the measurements computed in this
+document. Then:
+
+- The actual length should be $3"mm"$ shorter than the nominal length.
+- The K'nex jig's _measurement track_ should make a correctly sized string on it
+  be taut. Emperically this happens when the distance between the _outsides_ of
+  the rods sticking up (the longest measurement you might make) is $3"mm"$
+  longer than the nominal length.
+- The K'nex jig's _tying track_ should be two blue spacers shorter than the
+  measurement track.
+
 == Links
 
 - #link("http://www.tensegriteit.nl/e-links.html")[Tensegrity links]
