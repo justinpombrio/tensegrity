@@ -10,6 +10,7 @@ use std::process;
 enum MeasureKind {
     Distance,
     Height,
+    Radius,
     Angle,
 }
 
@@ -28,6 +29,7 @@ impl Measure {
         match self.kind {
             MeasureKind::Distance => a.distance(*b),
             MeasureKind::Height => (b.z() - a.z()).abs(),
+            MeasureKind::Radius => (a.x() * b.x() + a.y() * b.y()).sqrt(),
             MeasureKind::Angle => {
                 let cross = a.x() * b.y() - a.y() * b.x();
                 let dot = a.x() * b.x() + a.y() * b.y();
@@ -58,7 +60,7 @@ struct Tensegrity {
 
 impl Tensegrity {
     fn parse(input: &str) -> Tensegrity {
-        const NUM: &str = r"[-+]?\d*\.?\d+";
+        const NUM: &str = r"[-+]?\d*\.?\d+(?:/[-+]?\d*\.?\d+)?";
 
         let gravity_re = Regex::new(&format!(r"^gravity\s+({NUM})$")).unwrap();
         let steps_re = Regex::new(r"^steps\s+(\d+)$").unwrap();
@@ -74,7 +76,8 @@ impl Tensegrity {
         .unwrap();
         let conn_re = Regex::new(r"^(string|stick)\s+(\w+)\s+(\w+)$").unwrap();
         let measure_re =
-            Regex::new(r"^measure\s+(\w+)\s*=\s*(distance|height|angle)\s+(\w+)\s+(\w+)$").unwrap();
+            Regex::new(r"^measure\s+(\w+)\s*=\s*(distance|height|radius|angle)\s+(\w+)\s+(\w+)$")
+                .unwrap();
 
         let mut gravity = 0.0;
         let mut steps = 10_000;
@@ -94,9 +97,20 @@ impl Tensegrity {
         }
 
         fn parse_num(line: &str, num: &str) -> f64 {
-            match num.parse::<f64>() {
-                Ok(n) => n,
-                Err(_) => panic!("Could not parse number '{num}' in:\n{line}"),
+            if let Some((n, d)) = num.split_once('/') {
+                let n: f64 = n
+                    .parse()
+                    .unwrap_or_else(|_| panic!("Bad numerator '{n}' in:\n{line}"));
+                let d: f64 = d
+                    .parse()
+                    .unwrap_or_else(|_| panic!("Bad denominator '{d}' in:\n{line}"));
+                if d == 0.0 {
+                    panic!("Division by zero in '{num}' in:\n{line}");
+                }
+                n / d
+            } else {
+                num.parse()
+                    .unwrap_or_else(|_| panic!("Could not parse number '{num}' in:\n{line}"))
             }
         }
 
@@ -161,7 +175,7 @@ impl Tensegrity {
                 let rest_len = match &c[1] {
                     "string" => 0.0,
                     "stick" => points[a].distance(points[b]),
-                    _ => unreachable!("regex guarantees kind is 'string' or 'stick'"),
+                    _ => unreachable!("regex guarantees kind is 'string|stick'"),
                 };
                 connections.push(Connection { a, b, rest_len });
             } else if let Some(c) = measure_re.captures(line) {
@@ -176,8 +190,11 @@ impl Tensegrity {
                     kind: match &c[2] {
                         "distance" => MeasureKind::Distance,
                         "height" => MeasureKind::Height,
+                        "radius" => MeasureKind::Radius,
                         "angle" => MeasureKind::Angle,
-                        _ => unreachable!("regex guarantees kind is 'distance' or 'height'"),
+                        _ => {
+                            unreachable!("regex guarantees kind is 'distance|height|radius|angle'")
+                        }
                     },
                     a: lookup(&name_to_point_idx, line, &c[3]),
                     b: lookup(&name_to_point_idx, line, &c[4]),
@@ -225,7 +242,7 @@ impl Tensegrity {
             *point += force * rate;
             if point.z() < 0.0 {
                 // There's a floor
-                *point = Point::cartesian(point.x(), point.y(), 0.0);
+                // *point = Point::cartesian(point.x(), point.y(), 0.0);
             }
             total_movement += point.distance(old_point);
         }

@@ -3,15 +3,13 @@ steps 1000000
 damping 100
 settle 0.000001
 
-point origin = r: 0.0 theta: 0.0 z: 0.0
+point a0 = r: 1.0 theta: 0/3 z: 0.0
+point b0 = r: 1.0 theta: 1/3 z: 0.0
+point c0 = r: 1.0 theta: 2/3 z: 0.0
 
-point a0 = r: 1.0 theta: 0.000000000 z: 0.0
-point b0 = r: 1.0 theta: 0.333333333 z: 0.0
-point c0 = r: 1.0 theta: 0.666666666 z: 0.0
-
-point a1 = r: 1.0 theta: 0.400000000 z: 1.0
-point b1 = r: 1.0 theta: 0.733333333 z: 1.0
-point c1 = r: 1.0 theta: 1.066666666 z: 1.0
+point a1 = r: 1.0 theta: 1/3 z: 1.0
+point b1 = r: 1.0 theta: 2/3 z: 1.0
+point c1 = r: 1.0 theta: 0/3 z: 1.0
 
 stick a0 a1
 stick b0 b1
@@ -32,9 +30,9 @@ string c0 b1
 measure ha = height a0 a1
 measure hb = height b0 b1
 measure hc = height c0 c1
-measure ra = distance origin a0
-measure rb = distance origin b0
-measure rc = distance origin c0
+measure ra = radius a0 a0
+measure rb = radius b0 b0
+measure rc = radius c0 c0
 measure theta_a = angle a0 a1
 measure theta_b = angle b0 b1
 measure theta_c = angle c0 c1

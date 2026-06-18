@@ -1,0 +1,104 @@
+gravity 0.0
+steps 1000000
+damping 1000
+settle 0.000001
+
+point origin = r: 0.0 theta: 0.0 z: 0.0
+
+point a0 = r: 1.0 theta:  0/12 z: 0.0
+point b0 = r: 1.0 theta:  4/12 z: 0.0
+point c0 = r: 1.0 theta:  8/12 z: 0.0
+
+point a1 = r: 1.0 theta:  5/12 z: 1.0
+point b1 = r: 1.0 theta:  9/12 z: 1.0
+point c1 = r: 1.0 theta:  1/12 z: 1.0
+
+point d0 = r: 1.0 theta:  3/12 z: 1.0
+point e0 = r: 1.0 theta: 11/12 z: 1.0
+point f0 = r: 1.0 theta:  7/12 z: 1.0
+
+point d1 = r: 1.0 theta: 10/12 z: 2.0
+point e1 = r: 1.0 theta:  6/12 z: 2.0
+point f1 = r: 1.0 theta:  2/12 z: 2.0
+
+# Sticks
+
+stick a0 a1
+stick b0 b1
+stick c0 c1
+
+stick d0 d1
+stick e0 e1
+stick f0 f1
+
+# Triangles
+
+string a0 b0
+string b0 c0
+string c0 a0
+
+string d1 e1
+string e1 f1
+string f1 d1
+
+# Hexagons
+
+string e0 c1
+string c1 d0
+string d0 a1
+string a1 f0
+string f0 b1
+string b1 e0
+
+# Within-Layer Spines
+
+string a0 c1
+string b0 a1
+string c0 b1
+
+string d0 f1
+string e0 d1
+string f0 e1
+
+# Between-Layer Spines
+
+string a0 d0
+string b0 f0
+string c0 e0
+
+string a1 f1
+string b1 e1
+string c1 d1
+
+# Measurements
+
+measure ha = height a0 a1
+measure hb = height b0 b1
+measure hc = height c0 c1
+measure hd = height d0 d1
+measure he = height e0 e1
+measure hf = height f0 f1
+
+measure da = height d0 a1
+measure db = height e0 b1
+measure dc = height f0 c1
+
+measure ra0 = radius a0 a0
+measure rb0 = radius b0 b0
+measure rc0 = radius c0 c0
+measure ra1 = radius a1 a1
+measure rb1 = radius b1 b1
+measure rc1 = radius c1 c1
+measure rd0 = radius d0 d0
+measure re0 = radius e0 e0
+measure rf0 = radius f0 f0
+measure rd1 = radius d1 d1
+measure re1 = radius e1 e1
+measure rf1 = radius f1 f1
+
+measure theta_a = angle a0 a1
+measure theta_b = angle b0 b1
+measure theta_c = angle c0 c1
+measure theta_d = angle d0 d1
+measure theta_e = angle e0 e1
+measure theta_f = angle f0 f1
